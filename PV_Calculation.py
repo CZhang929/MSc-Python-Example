@@ -31,3 +31,4 @@ power_capacity = no_p * pv_power / 1000
 print("Number of panels:", int(no_p))
 print("Total power capacity (kWp):", power_capacity)
 print (rw)
+pring(rl)
