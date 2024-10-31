@@ -102,20 +102,18 @@ def battery_charge_action(soc, power, E_tot, P_max, T):
     net_demand: float
         The net demand post battery operation.
     """
-    if power > 0:  # excess demand - discharge the battery
-        # calculate the energy discharged within a single time period.
-        # think about the physical constraints of the battery (e.g. energy stored, power capacity)
-        # think about if your energy is positive or negative
-        
+if power > 0:  # excess demand - discharge the battery
+        # Calculate the energy to discharge, considering constraints
+        deltaE = -1 * min(P_max * T, soc, power * T)
     elif power < 0:  # excess generation - charge the battery
-        # calculate the energy charged within a single time period.
-        # think about the physical constraints of the battery (e.g. energy stored, power capacity)
-        # think about if your energy is positive or negative
-        
+        # Calculate the energy to charge, considering constraints
+        deltaE = min(P_max * T, (E_tot - soc), -1 * power * T)
     else:
-        
-    # update soc and calculate net_power
-    return soc, net_power
+        deltaE = 0  # no charging or discharging
+    soc += deltaE
+    net_demand = power + (deltaE / T)
+    
+    return soc, net_demand
 
 
 # =============================================================================
